@@ -16,8 +16,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 backend:
-  name: github
-  repo: premjithx86/haritest
+  name: git-gateway
   branch: main
 
 # Uncomment to enable local development with `npx decap-server`

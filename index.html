@@ -6,10 +6,24 @@
     <title>Harichand Photography — Portfolio</title>
     <meta name="description" content="Harichand Photography — editorial, documentary, and commercial photography across six continents. Portraits, landscapes, street, wildlife, and events." />
     <meta name="robots" content="index, follow" />
+    <!-- Netlify Identity Widget — required for Decap CMS login -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Redirect to /admin after Netlify Identity login -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', user => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+      }
+    </script>
   </body>
 </html>
