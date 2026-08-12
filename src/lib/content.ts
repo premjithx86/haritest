@@ -42,7 +42,8 @@ import type {
 // Uses js-yaml for full YAML spec support (multiline strings, arrays, etc.)
 
 function parseFrontmatter<T>(raw: string): T {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+  const cleanRaw = raw.replace(/^\uFEFF/, '').trimStart()
+  const match = cleanRaw.match(/^---\r?\n([\s\S]*?)\r?\n---/)
   if (!match) return {} as T
   return (load(match[1]) ?? {}) as T
 }
@@ -92,3 +93,4 @@ export const galleryCategories = [
   'All',
   ...Array.from(new Set(gallery.map(g => g.category).filter(Boolean))),
 ]
+
