@@ -1,0 +1,426 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Decap CMS Configuration
+# Photographer Portfolio Template — Harichand Photography
+#
+# REUSABILITY NOTES
+# To adapt this template for a new photography client:
+#   1. Replace all seeded content in content/ with the client's content
+#   2. Replace images in public/images/ with the client's photos
+#   3. Update the `site_url` below
+#   4. Update gallery category options in the gallery collection
+#   5. Connect a new Netlify site + enable Identity + enable Git Gateway
+#
+# AUTHENTICATION
+# Uses Netlify Identity + Git Gateway (no API keys or custom server required)
+# Docs: https://decapcms.org/docs/netlify-backend/
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend:
+  name: git-gateway
+  branch: main
+
+# Uncomment to enable local development with `npx decap-server`
+# local_backend: true
+
+# Update this after connecting to Netlify
+site_url: https://your-site.netlify.app
+display_url: https://your-site.netlify.app
+
+# ── Media ────────────────────────────────────────────────────────────────────
+# Uploaded files are committed to the repo and served via Netlify CDN
+media_folder: public/images
+public_folder: /images
+
+locale: en
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COLLECTIONS
+# ─────────────────────────────────────────────────────────────────────────────
+
+collections:
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PAGES — Singleton content (one file per section/page)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: pages
+    label: "Pages"
+    files:
+
+      # ── Hero Section ───────────────────────────────────────────────────────
+      - name: hero
+        label: "Hero Section"
+        file: content/pages/hero.md
+        fields:
+          - label: "Tagline (top label)"
+            name: tagline
+            widget: string
+            hint: "Short descriptor above the heading — e.g. 'Photo Generalist — Est. 2014'"
+
+          - label: "Heading — Line 1"
+            name: heading_line1
+            widget: string
+            hint: "First line of the large hero heading"
+
+          - label: "Heading — Line 2 (displayed faded)"
+            name: heading_line2
+            widget: string
+            hint: "Displayed with reduced opacity for contrast"
+
+          - label: "Heading — Line 3"
+            name: heading_line3
+            widget: string
+
+          - label: "Hero Background Image"
+            name: hero_image
+            widget: image
+            hint: "Full-screen background photo. High resolution recommended (min 1800px wide)."
+
+          - label: "Primary CTA Button Label"
+            name: cta_primary
+            widget: string
+            default: "View Portfolio"
+
+          - label: "Secondary CTA Label"
+            name: cta_secondary
+            widget: string
+            hint: "Text link below the primary button — e.g. 'About Harichand'"
+            default: "About Harichand"
+
+          - label: "Coordinates — Latitude"
+            name: coordinates_lat
+            widget: string
+            required: false
+            hint: "Optional location indicator — e.g. 50° 56′ N"
+
+          - label: "Coordinates — Longitude"
+            name: coordinates_lng
+            widget: string
+            required: false
+            hint: "e.g. 4° 21′ E"
+
+          - label: "Coordinates — Location Label"
+            name: coordinates_label
+            widget: string
+            required: false
+            hint: "e.g. Brussels · 2024"
+
+      # ── About Section ──────────────────────────────────────────────────────
+      - name: about
+        label: "About Section"
+        file: content/pages/about.md
+        fields:
+          - label: "Photographer Name"
+            name: photographer_name
+            widget: string
+            hint: "Used in the navigation, about section, and footer"
+
+          - label: "Profile Photo"
+            name: photo
+            widget: image
+            hint: "Portrait photo of the photographer"
+
+          - label: "Section Heading — Line 1"
+            name: heading_line1
+            widget: string
+            default: "I photograph"
+
+          - label: "Section Heading — Line 2 (italic)"
+            name: heading_line2
+            widget: string
+            default: "the unguarded"
+
+          - label: "Section Heading — Line 3 (italic)"
+            name: heading_line3
+            widget: string
+            default: "moment."
+
+          - label: "Bio — Paragraph 1"
+            name: bio_1
+            widget: text
+
+          - label: "Bio — Paragraph 2"
+            name: bio_2
+            widget: text
+
+          - label: "Bio — Paragraph 3 (optional)"
+            name: bio_3
+            widget: text
+            required: false
+
+          - label: "Current Location"
+            name: location
+            widget: string
+            hint: "Displayed in the floating card — e.g. Brussels, Belgium"
+
+          - label: "Instagram URL"
+            name: instagram_url
+            widget: string
+            required: false
+            hint: "Full URL including https://"
+
+          - label: "Press Kit URL"
+            name: press_kit_url
+            widget: string
+            required: false
+            hint: "Link to a PDF or download page"
+
+          - label: "Stats Bar"
+            name: stats
+            widget: list
+            hint: "The four statistics shown in the bar below the hero. Add, remove, or reorder freely."
+            fields:
+              - label: "Number / Value"
+                name: num
+                widget: string
+                hint: "e.g. 10+ or 847"
+              - label: "Label"
+                name: label
+                widget: string
+                hint: "e.g. Years Active"
+
+      # ── Contact Section ────────────────────────────────────────────────────
+      - name: contact
+        label: "Contact & Footer"
+        file: content/pages/contact.md
+        fields:
+          - label: "Email Address"
+            name: email
+            widget: string
+
+          - label: "Phone Number"
+            name: phone
+            widget: string
+            hint: "Include country code — e.g. +32 491 23 45 67"
+
+          - label: "Location Text"
+            name: location_text
+            widget: string
+            hint: "e.g. Brussels, Belgium — Available Worldwide"
+
+          - label: "Response Note — Line 1"
+            name: response_note_1
+            widget: string
+            default: "Typical response time: 24–48 hours."
+
+          - label: "Response Note — Line 2"
+            name: response_note_2
+            widget: string
+            default: "For urgent assignments, please call directly."
+
+          - label: "Footer — Copyright Text"
+            name: footer_copyright
+            widget: string
+            hint: "e.g. © 2024 Harichand Photography. All rights reserved."
+
+          - label: "Footer — Tagline"
+            name: footer_tagline
+            widget: string
+            hint: "e.g. Brussels · Available Worldwide"
+
+      # ── Featured Project ───────────────────────────────────────────────────
+      - name: featured
+        label: "Featured Project"
+        file: content/pages/featured.md
+        fields:
+          - label: "Project Title"
+            name: project_title
+            widget: string
+
+          - label: "Project Description"
+            name: project_description
+            widget: text
+            hint: "Short paragraph shown below the featured images"
+
+          - label: "Image 1"
+            name: image_1
+            widget: image
+
+          - label: "Image 1 — Alt Text"
+            name: image_alt_1
+            widget: string
+            required: false
+
+          - label: "Image 2"
+            name: image_2
+            widget: image
+
+          - label: "Image 2 — Alt Text"
+            name: image_alt_2
+            widget: string
+            required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # DATA — Structured lists (services, testimonials, awards)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: data
+    label: "Site Data"
+    files:
+
+      # ── Services ───────────────────────────────────────────────────────────
+      - name: services
+        label: "Services"
+        file: content/data/services.md
+        fields:
+          - label: "Services"
+            name: services
+            widget: list
+            hint: "Add, remove, or reorder services. The number field is display-only (e.g. 01)."
+            fields:
+              - label: "Display Number"
+                name: num
+                widget: string
+                hint: "e.g. 01, 02 — used as a visual label only"
+              - label: "Service Title"
+                name: title
+                widget: string
+              - label: "Description"
+                name: description
+                widget: text
+
+      # ── Testimonials ───────────────────────────────────────────────────────
+      - name: testimonials
+        label: "Testimonials"
+        file: content/data/testimonials.md
+        fields:
+          - label: "Testimonials"
+            name: testimonials
+            widget: list
+            fields:
+              - label: "Quote"
+                name: quote
+                widget: text
+              - label: "Client Name"
+                name: name
+                widget: string
+              - label: "Role / Context"
+                name: role
+                widget: string
+                hint: "e.g. Art Director, Vogue Paris  |  Wedding — Vienna 2024"
+
+      # ── Awards & Recognition ───────────────────────────────────────────────
+      - name: awards
+        label: "Awards & Recognition"
+        file: content/data/awards.md
+        fields:
+          - label: "Awards & Publications"
+            name: awards
+            widget: list
+            hint: "Listed newest first. Split evenly into two columns on the website."
+            fields:
+              - label: "Year"
+                name: year
+                widget: string
+              - label: "Title"
+                name: title
+                widget: string
+              - label: "Organization / Publication"
+                name: org
+                widget: string
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # GALLERY — One Markdown file per photo (folder collection)
+  #
+  # TO ADD NEW CATEGORIES FOR A NEW CLIENT:
+  #   Update the `options` list below under the category field.
+  #   The gallery filter buttons on the website are derived automatically
+  #   from the categories present in the actual gallery content.
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: gallery
+    label: "Gallery"
+    label_singular: "Photo"
+    folder: content/gallery
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    summary: "{{title}} | {{category}} | {{year}}"
+    sortable_fields: ["order", "title", "year", "category"]
+    fields:
+
+      - label: "Title"
+        name: title
+        widget: string
+        hint: "Short artistic title displayed on hover — e.g. Reverie"
+
+      - label: "Image"
+        name: image
+        widget: image
+        hint: "Upload the photo or paste an image URL. Uploads are committed to the repository."
+
+      - label: "Alt Text (for SEO & accessibility)"
+        name: alt_text
+        widget: string
+        required: false
+        hint: "Describe what is in the photo for screen readers and search engines"
+
+      - label: "Caption"
+        name: caption
+        widget: text
+        required: false
+        hint: "Optional longer description. Shown in the hover overlay (falls back to Location if empty)."
+
+      - label: "Category"
+        name: category
+        widget: select
+        options:
+          - Portraits
+          - Landscapes
+          - Street
+          - Wildlife
+          - Events
+        hint: "Used for gallery filtering. To add a new category, edit the options list in config.yml."
+
+      - label: "Location"
+        name: location
+        widget: string
+        required: false
+        hint: "Where the photo was taken — e.g. Amsterdam, NL"
+
+      - label: "Year"
+        name: year
+        widget: string
+        hint: "Year the photo was taken — e.g. 2024"
+
+      - label: "Date Taken"
+        name: date_taken
+        widget: datetime
+        required: false
+        time_format: false
+        hint: "Exact shoot date — optional, for your records"
+
+      - label: "Portrait Orientation (Tall)"
+        name: tall
+        widget: boolean
+        default: false
+        hint: "ON = portrait 3:4 ratio. OFF = landscape 4:3 ratio."
+
+      - label: "Mark as Featured"
+        name: featured
+        widget: boolean
+        default: false
+        hint: "Featured photos appear in the Featured Project section on the homepage"
+
+      - label: "Display Order"
+        name: order
+        widget: number
+        default: 0
+        value_type: int
+        min: 0
+        hint: "Lower numbers appear first. Use 1, 2, 3... or 10, 20, 30... for easy reordering."
+
+      - label: "Camera"
+        name: camera
+        widget: string
+        required: false
+        hint: "e.g. Sony A7R V — optional metadata for your records"
+
+      - label: "Lens"
+        name: lens
+        widget: string
+        required: false
+        hint: "e.g. 85mm f/1.4 GM — optional metadata for your records"
+
+      - label: "Tags"
+        name: tags
+        widget: list
+        required: false
+        hint: "Optional keywords for internal organization — e.g. black-and-white, golden-hour"

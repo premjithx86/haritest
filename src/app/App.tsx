@@ -1,152 +1,17 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight, ArrowUpRight, Mail, Phone, MapPin, Instagram } from "lucide-react";
+import { gallery, galleryCategories, hero, about, contact, featured, services, testimonials, awards } from "../lib/content";
 
+// ─── Typography constants (design tokens — not content) ───────────────────────
 const FONT_DISPLAY = "'Playfair Display', Georgia, serif";
-const FONT_BODY = "'DM Sans', system-ui, sans-serif";
-const FONT_MONO = "'DM Mono', 'Courier New', monospace";
-
-const GALLERY = [
-  {
-    id: 1, category: "Portraits",
-    src: "https://images.unsplash.com/photo-1568038479111-87bf80659645?w=800&h=1100&fit=crop&auto=format",
-    title: "Reverie", location: "Amsterdam, NL", year: "2024", tall: true,
-  },
-  {
-    id: 2, category: "Landscapes",
-    src: "https://images.unsplash.com/photo-1496614932623-0a3a9743552e?w=1200&h=800&fit=crop&auto=format",
-    title: "Dune Light", location: "Zeeland, NL", year: "2024", tall: false,
-  },
-  {
-    id: 3, category: "Street",
-    src: "https://images.unsplash.com/photo-1570070998935-17658353efb6?w=700&h=1050&fit=crop&auto=format",
-    title: "Rush Hour", location: "New York, US", year: "2023", tall: true,
-  },
-  {
-    id: 4, category: "Wildlife",
-    src: "https://images.unsplash.com/photo-1504173010664-32509aeebb62?w=1000&h=700&fit=crop&auto=format",
-    title: "Meridian", location: "Serengeti, TZ", year: "2023", tall: false,
-  },
-  {
-    id: 5, category: "Portraits",
-    src: "https://images.unsplash.com/photo-1536766768598-e09213fdcf22?w=800&h=1000&fit=crop&auto=format",
-    title: "Veil", location: "Marrakech, MA", year: "2023", tall: true,
-  },
-  {
-    id: 6, category: "Street",
-    src: "https://images.unsplash.com/photo-1607245795313-b5e84006a85d?w=800&h=1100&fit=crop&auto=format",
-    title: "Concrete", location: "Tokyo, JP", year: "2024", tall: true,
-  },
-  {
-    id: 7, category: "Landscapes",
-    src: "https://images.unsplash.com/photo-1489493512598-d08130f49bea?w=1200&h=800&fit=crop&auto=format",
-    title: "Atlas", location: "Dolomites, IT", year: "2023", tall: false,
-  },
-  {
-    id: 8, category: "Events",
-    src: "https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?w=1000&h=700&fit=crop&auto=format",
-    title: "Gilded Hall", location: "Vienna, AT", year: "2024", tall: false,
-  },
-  {
-    id: 9, category: "Wildlife",
-    src: "https://images.unsplash.com/photo-1503656142023-618e7d1f435a?w=800&h=1000&fit=crop&auto=format",
-    title: "Stripes", location: "Amboseli, KE", year: "2022", tall: true,
-  },
-  {
-    id: 10, category: "Portraits",
-    src: "https://images.unsplash.com/photo-1606143412458-acc5f86de897?w=800&h=1100&fit=crop&auto=format",
-    title: "Noir", location: "Paris, FR", year: "2024", tall: true,
-  },
-  {
-    id: 11, category: "Landscapes",
-    src: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=1200&h=800&fit=crop&auto=format",
-    title: "Ember", location: "Black Forest, DE", year: "2022", tall: false,
-  },
-  {
-    id: 12, category: "Events",
-    src: "https://images.unsplash.com/photo-1542598688-76ad90c5b01e?w=1000&h=700&fit=crop&auto=format",
-    title: "First Light", location: "Tuscany, IT", year: "2023", tall: false,
-  },
-  {
-    id: 13, category: "Street",
-    src: "https://images.unsplash.com/photo-1629055747366-e09158ba874c?w=700&h=1050&fit=crop&auto=format",
-    title: "Crossing", location: "Kolkata, IN", year: "2022", tall: true,
-  },
-  {
-    id: 14, category: "Wildlife",
-    src: "https://images.unsplash.com/photo-1606804235853-a2bdff23724b?w=800&h=1100&fit=crop&auto=format",
-    title: "Forest Warden", location: "Białowieża, PL", year: "2023", tall: true,
-  },
-  {
-    id: 15, category: "Portraits",
-    src: "https://images.unsplash.com/photo-1532170579297-281918c8ae72?w=1000&h=700&fit=crop&auto=format",
-    title: "Gaze", location: "Berlin, DE", year: "2024", tall: false,
-  },
-];
-
-const TESTIMONIALS = [
-  {
-    quote: "Marcus captured our wedding with a quiet precision that turned fleeting moments into permanent art. Every frame tells the story we lived.",
-    name: "Elena & Tobias R.",
-    role: "Wedding — Vienna 2024",
-  },
-  {
-    quote: "Working with Marcus on the Vogue editorial was effortless. His instinct for light is almost supernatural — I haven't worked with anyone quite like him.",
-    name: "Claire Montagne",
-    role: "Art Director, Vogue Paris",
-  },
-  {
-    quote: "The campaign images exceeded every brief we gave him. He doesn't just photograph a subject — he interprets it.",
-    name: "Joon-ki Park",
-    role: "Creative Director, Maison Séoul",
-  },
-];
-
-const AWARDS = [
-  { year: "2024", title: "World Press Photo — Nature Category Winner", org: "World Press Photo Foundation" },
-  { year: "2024", title: "Portrait of the Year", org: "Sony World Photography Awards" },
-  { year: "2023", title: "Feature Story — Gold Medal", org: "Pictures of the Year International" },
-  { year: "2023", title: "Published: Vogue Paris, March Issue", org: "Condé Nast" },
-  { year: "2022", title: "Documentary Series — Finalist", org: "National Geographic" },
-  { year: "2022", title: "Published: TIME Magazine Cover Story", org: "TIME" },
-  { year: "2021", title: "Emerging Photographer of the Year", org: "British Journal of Photography" },
-  { year: "2020", title: "Published: The New Yorker Photo Essay", org: "The New Yorker" },
-];
-
-const SERVICES = [
-  {
-    num: "01",
-    title: "Editorial & Magazine",
-    desc: "High-concept portrait and fashion photography for print and digital publications. Experienced with complex briefs, international talent, and tight production schedules.",
-  },
-  {
-    num: "02",
-    title: "Commercial & Brand",
-    desc: "Campaign imagery built to earn attention. From intimate product close-ups to large-scale lifestyle productions across multiple days and locations.",
-  },
-  {
-    num: "03",
-    title: "Documentary & Reportage",
-    desc: "Long-form visual journalism and brand storytelling. Available for extended travel assignments on six continents. Languages: English, French, Dutch.",
-  },
-  {
-    num: "04",
-    title: "Events & Celebrations",
-    desc: "Weddings, galas, cultural ceremonies. Discreet, attentive coverage that honors the moment without intruding upon it.",
-  },
-  {
-    num: "05",
-    title: "Fine Art Prints",
-    desc: "Limited-edition archival pigment prints on Hahnemühle paper, available for private collectors and institutional acquisition. Certificate of authenticity included.",
-  },
-];
-
-const CATEGORIES = ["All", "Portraits", "Landscapes", "Street", "Wildlife", "Events"];
+const FONT_BODY    = "'DM Sans', system-ui, sans-serif";
+const FONT_MONO    = "'DM Mono', 'Courier New', monospace";
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", service: "", message: "" });
   const [sent, setSent] = useState(false);
 
@@ -157,8 +22,8 @@ export default function App() {
   }, []);
 
   const filtered = activeCategory === "All"
-    ? GALLERY
-    : GALLERY.filter(img => img.category === activeCategory);
+    ? gallery
+    : gallery.filter(img => img.category === activeCategory);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -190,7 +55,7 @@ export default function App() {
             className="text-foreground hover:text-foreground/70 transition-colors text-xs tracking-[0.3em] uppercase"
             style={{ fontFamily: FONT_MONO }}
           >
-            Marcus Vael
+            {about.photographer_name}
           </button>
 
           <ul className="hidden md:flex items-center gap-10">
@@ -245,8 +110,8 @@ export default function App() {
       <section id="hero" className="relative flex items-end overflow-hidden" style={{ minHeight: "100svh" }}>
         <div className="absolute inset-0 bg-background">
           <img
-            src="https://images.unsplash.com/photo-1568038479111-87bf80659645?w=1800&h=1200&fit=crop&auto=format"
-            alt="Dramatic cinematic portrait — hero image"
+            src={hero.hero_image}
+            alt={`${about.photographer_name} — hero image`}
             className="w-full h-full object-cover"
             style={{ opacity: 0.55, mixBlendMode: "luminosity" }}
           />
@@ -261,7 +126,7 @@ export default function App() {
             className="text-foreground/40 text-xs tracking-[0.4em] uppercase mb-8"
             style={{ fontFamily: FONT_MONO }}
           >
-            Photo Generalist — Est. 2014
+            {hero.tagline}
           </p>
           <h1
             className="font-normal leading-[0.92] mb-10 tracking-tight"
@@ -270,18 +135,18 @@ export default function App() {
               fontSize: "clamp(3.5rem, 9vw, 8rem)",
             }}
           >
-            Light finds
+            {hero.heading_line1}
             <br />
-            <span className="text-foreground/35">its own</span>
+            <span className="text-foreground/35">{hero.heading_line2}</span>
             <br />
-            language.
+            {hero.heading_line3}
           </h1>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
             <button
               onClick={() => scrollTo("work")}
               className="group flex items-center gap-3 bg-foreground text-background px-8 py-4 text-sm tracking-[0.12em] uppercase hover:bg-foreground/90 transition-colors"
             >
-              View Portfolio
+              {hero.cta_primary}
               <ArrowRight
                 size={14}
                 className="transition-transform duration-300 group-hover:translate-x-1"
@@ -291,42 +156,41 @@ export default function App() {
               onClick={() => scrollTo("about")}
               className="text-foreground/50 hover:text-foreground transition-colors text-sm pb-px border-b border-transparent hover:border-foreground/30"
             >
-              About Marcus
+              {hero.cta_secondary}
             </button>
           </div>
         </div>
 
-        <div
-          className="absolute bottom-8 right-12 hidden lg:flex flex-col items-end gap-1 text-foreground/25 text-[11px]"
-          style={{ fontFamily: FONT_MONO }}
-        >
-          <span>50° 56′ N</span>
-          <span>4° 21′ E</span>
-          <span className="mt-2 text-foreground/15">Brussels · 2024</span>
-        </div>
+        {(hero.coordinates_lat || hero.coordinates_lng) && (
+          <div
+            className="absolute bottom-8 right-12 hidden lg:flex flex-col items-end gap-1 text-foreground/25 text-[11px]"
+            style={{ fontFamily: FONT_MONO }}
+          >
+            {hero.coordinates_lat && <span>{hero.coordinates_lat}</span>}
+            {hero.coordinates_lng && <span>{hero.coordinates_lng}</span>}
+            {hero.coordinates_label && (
+              <span className="mt-2 text-foreground/15">{hero.coordinates_label}</span>
+            )}
+          </div>
+        )}
       </section>
 
       {/* ── STATS BAR ── */}
       <section className="border-y border-border">
         <div className="max-w-screen-xl mx-auto px-6 md:px-12 py-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {[
-            ["10+", "Years Active"],
-            ["847", "Published Images"],
-            ["34", "Countries"],
-            ["6", "Major Awards"],
-          ].map(([num, label]) => (
-            <div key={label}>
+          {(about.stats ?? []).map((stat) => (
+            <div key={stat.label}>
               <span
                 className="block text-4xl font-normal text-foreground leading-none mb-2"
                 style={{ fontFamily: FONT_DISPLAY }}
               >
-                {num}
+                {stat.num}
               </span>
               <span
                 className="text-[10px] text-foreground/35 tracking-[0.25em] uppercase"
                 style={{ fontFamily: FONT_MONO }}
               >
-                {label}
+                {stat.label}
               </span>
             </div>
           ))}
@@ -353,7 +217,7 @@ export default function App() {
             </div>
 
             <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map(cat => (
+              {galleryCategories.map(cat => (
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
@@ -374,25 +238,25 @@ export default function App() {
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-3">
             {filtered.map(img => (
               <div
-                key={img.id}
+                key={img.title}
                 className="break-inside-avoid mb-3 relative overflow-hidden bg-muted cursor-pointer"
-                onMouseEnter={() => setHoveredId(img.id)}
+                onMouseEnter={() => setHoveredId(img.title)}
                 onMouseLeave={() => setHoveredId(null)}
               >
                 <img
-                  src={img.src}
-                  alt={`${img.title} — ${img.category} photography, ${img.location}`}
+                  src={img.image}
+                  alt={img.alt_text || `${img.title} — ${img.category} photography${img.location ? `, ${img.location}` : ""}`}
                   className="w-full object-cover block transition-transform duration-700"
                   style={{
                     aspectRatio: img.tall ? "3/4" : "4/3",
-                    transform: hoveredId === img.id ? "scale(1.04)" : "scale(1)",
+                    transform: hoveredId === img.title ? "scale(1.04)" : "scale(1)",
                   }}
                 />
                 <div
                   className="absolute inset-0 transition-opacity duration-500 flex flex-col justify-end p-5"
                   style={{
                     background: "linear-gradient(to top, rgba(12,11,9,0.92) 0%, rgba(12,11,9,0.2) 50%, transparent 100%)",
-                    opacity: hoveredId === img.id ? 1 : 0,
+                    opacity: hoveredId === img.title ? 1 : 0,
                   }}
                 >
                   <p
@@ -407,7 +271,7 @@ export default function App() {
                   >
                     {img.title}
                   </h3>
-                  <p className="text-foreground/50 text-xs">{img.location}</p>
+                  <p className="text-foreground/50 text-xs">{img.caption || img.location}</p>
                 </div>
               </div>
             ))}
@@ -428,14 +292,8 @@ export default function App() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-border">
           {[
-            {
-              src: "https://images.unsplash.com/photo-1503525443530-339273ca8a86?w=1000&h=700&fit=crop&auto=format",
-              alt: "Wedding couple — Tuscany event photography",
-            },
-            {
-              src: "https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?w=1000&h=700&fit=crop&auto=format",
-              alt: "Gilded ceremonial hall — Vienna gala photography",
-            },
+            { src: featured.image_1, alt: featured.image_alt_1 || featured.project_title },
+            { src: featured.image_2, alt: featured.image_alt_2 || featured.project_title },
           ].map((item, i) => (
             <div key={i} className="overflow-hidden bg-muted group" style={{ aspectRatio: "4/3" }}>
               <img
@@ -454,11 +312,10 @@ export default function App() {
                 className="font-normal mb-3"
                 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.75rem, 3.5vw, 3rem)" }}
               >
-                Baroque Reverie
+                {featured.project_title}
               </h3>
               <p className="text-foreground/55 max-w-lg leading-relaxed text-sm">
-                A commission for the Vienna State Opera&apos;s 2024 gala season. Two evenings of ceremony, music,
-                and gathered humanity — compressed into 48 frames.
+                {featured.project_description}
               </p>
             </div>
             <button className="group shrink-0 flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors pb-px border-b border-transparent hover:border-foreground/30">
@@ -479,8 +336,8 @@ export default function App() {
             <div className="relative">
               <div className="overflow-hidden bg-muted" style={{ aspectRatio: "4/5" }}>
                 <img
-                  src="https://images.unsplash.com/photo-1621024994278-e409544f4085?w=800&h=1050&fit=crop&auto=format"
-                  alt="Marcus Vael — photographer at work"
+                  src={about.photo}
+                  alt={`${about.photographer_name} — photographer at work`}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -489,7 +346,7 @@ export default function App() {
                 style={{ fontFamily: FONT_MONO }}
               >
                 <p className="text-foreground/35 text-[9px] tracking-[0.3em] uppercase mb-1">Currently based in</p>
-                <p className="text-foreground text-sm">Brussels, Belgium</p>
+                <p className="text-foreground text-sm">{about.location}</p>
               </div>
             </div>
 
@@ -504,45 +361,44 @@ export default function App() {
                 className="font-normal leading-[1.05] mb-9"
                 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
               >
-                I photograph
+                {about.heading_line1}
                 <br />
-                <em>the unguarded</em>
+                <em>{about.heading_line2}</em>
                 <br />
-                <em>moment.</em>
+                <em>{about.heading_line3}</em>
               </h2>
               <div className="space-y-5 text-foreground/60 leading-relaxed text-sm">
-                <p>
-                  Marcus Vael is a Belgian-born photographer working across editorial, documentary,
-                  and commercial disciplines. His practice centers on the tension between stillness
-                  and movement — frames that feel inevitable, yet were never planned.
-                </p>
-                <p>
-                  Trained at the Royal Academy of Fine Arts in Ghent, Marcus has spent the last
-                  decade photographing on six continents, contributing to Vogue, TIME, National
-                  Geographic, and Le Monde Magazine.
-                </p>
-                <p>
-                  He brings the same deliberate attention to a wedding ceremony in Tuscany as to a
-                  wildlife assignment in the Serengeti. The subject changes; the commitment does not.
-                </p>
+                <p>{about.bio_1}</p>
+                <p>{about.bio_2}</p>
+                {about.bio_3 && <p>{about.bio_3}</p>}
               </div>
 
               <div className="mt-10 pt-8 border-t border-border flex items-center gap-5">
-                <a
-                  href="#"
-                  className="text-foreground/40 hover:text-foreground transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram size={17} />
-                </a>
-                <span className="text-border text-lg">·</span>
-                <a
-                  href="#"
-                  className="text-foreground/40 hover:text-foreground transition-colors text-xs tracking-[0.2em] uppercase"
-                  style={{ fontFamily: FONT_MONO }}
-                >
-                  Download Press Kit
-                </a>
+                {about.instagram_url && about.instagram_url !== "#" && (
+                  <a
+                    href={about.instagram_url}
+                    className="text-foreground/40 hover:text-foreground transition-colors"
+                    aria-label="Instagram"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Instagram size={17} />
+                  </a>
+                )}
+                {about.instagram_url && about.instagram_url !== "#" && about.press_kit_url && about.press_kit_url !== "#" && (
+                  <span className="text-border text-lg">·</span>
+                )}
+                {about.press_kit_url && about.press_kit_url !== "#" && (
+                  <a
+                    href={about.press_kit_url}
+                    className="text-foreground/40 hover:text-foreground transition-colors text-xs tracking-[0.2em] uppercase"
+                    style={{ fontFamily: FONT_MONO }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Download Press Kit
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -570,7 +426,7 @@ export default function App() {
           </div>
 
           <div className="divide-y divide-border">
-            {SERVICES.map(svc => (
+            {services.map(svc => (
               <div
                 key={svc.num}
                 className="group grid grid-cols-1 md:grid-cols-[72px_1fr_32px] gap-4 md:gap-8 py-8 -mx-4 px-4 transition-colors hover:bg-foreground/[0.025]"
@@ -588,7 +444,7 @@ export default function App() {
                   >
                     {svc.title}
                   </h3>
-                  <p className="text-foreground/55 text-sm leading-relaxed max-w-xl">{svc.desc}</p>
+                  <p className="text-foreground/55 text-sm leading-relaxed max-w-xl">{svc.description}</p>
                 </div>
                 <div className="hidden md:flex items-center justify-end">
                   <ArrowUpRight
@@ -613,7 +469,7 @@ export default function App() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
-            {TESTIMONIALS.map((t, i) => (
+            {testimonials.map((t, i) => (
               <div key={i} className="flex flex-col">
                 <span
                   className="text-5xl text-foreground/20 leading-none mb-5 block"
@@ -649,11 +505,11 @@ export default function App() {
             className="text-foreground/35 text-[10px] tracking-[0.35em] uppercase mb-16"
             style={{ fontFamily: FONT_MONO }}
           >
-            Recognition & Publications
+            Recognition &amp; Publications
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20">
-            {[AWARDS.slice(0, 4), AWARDS.slice(4)].map((group, gi) => (
+            {[awards.slice(0, Math.ceil(awards.length / 2)), awards.slice(Math.ceil(awards.length / 2))].map((group, gi) => (
               <div key={gi} className="divide-y divide-border">
                 {group.map((a, i) => (
                   <div key={i} className="py-5 flex items-start gap-6">
@@ -704,22 +560,22 @@ export default function App() {
 
               <div className="space-y-4 text-sm mb-12">
                 <a
-                  href="mailto:hello@marcusvael.com"
+                  href={`mailto:${contact.email}`}
                   className="flex items-center gap-3 text-foreground/50 hover:text-foreground transition-colors"
                 >
                   <Mail size={13} className="shrink-0" />
-                  hello@marcusvael.com
+                  {contact.email}
                 </a>
                 <a
-                  href="tel:+32491234567"
+                  href={`tel:${contact.phone.replace(/\s/g, "")}`}
                   className="flex items-center gap-3 text-foreground/50 hover:text-foreground transition-colors"
                 >
                   <Phone size={13} className="shrink-0" />
-                  +32 491 23 45 67
+                  {contact.phone}
                 </a>
                 <div className="flex items-center gap-3 text-foreground/50">
                   <MapPin size={13} className="shrink-0" />
-                  Brussels, Belgium — Available Worldwide
+                  {contact.location_text}
                 </div>
               </div>
 
@@ -727,8 +583,8 @@ export default function App() {
                 className="text-foreground/25 text-[11px] leading-relaxed"
                 style={{ fontFamily: FONT_MONO }}
               >
-                <p>Typical response time: 24–48 hours.</p>
-                <p>For urgent assignments, please call directly.</p>
+                <p>{contact.response_note_1}</p>
+                <p>{contact.response_note_2}</p>
               </div>
             </div>
 
@@ -741,7 +597,7 @@ export default function App() {
                   Thank you.
                 </span>
                 <p className="text-foreground/55 text-sm leading-relaxed max-w-sm">
-                  Your message has been received. Marcus will be in touch within 48 hours.
+                  Your message has been received. {about.photographer_name} will be in touch within 48 hours.
                 </p>
               </div>
             ) : (
@@ -783,11 +639,9 @@ export default function App() {
                     className="w-full bg-background border border-border focus:border-foreground/40 px-4 py-3 text-sm text-foreground outline-none transition-colors appearance-none"
                   >
                     <option value="">Select a service…</option>
-                    <option>Editorial &amp; Magazine</option>
-                    <option>Commercial &amp; Brand</option>
-                    <option>Documentary &amp; Reportage</option>
-                    <option>Events &amp; Celebrations</option>
-                    <option>Fine Art Prints</option>
+                    {services.map(svc => (
+                      <option key={svc.num}>{svc.title}</option>
+                    ))}
                     <option>Other Inquiry</option>
                   </select>
                 </div>
@@ -832,13 +686,13 @@ export default function App() {
             className="text-foreground/25 text-[11px] tracking-[0.2em]"
             style={{ fontFamily: FONT_MONO }}
           >
-            © 2024 Marcus Vael Photography. All rights reserved.
+            {contact.footer_copyright}
           </p>
           <p
             className="text-foreground/15 text-[11px] tracking-[0.15em]"
             style={{ fontFamily: FONT_MONO }}
           >
-            Brussels · Available Worldwide
+            {contact.footer_tagline}
           </p>
         </div>
       </footer>

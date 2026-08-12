@@ -1,0 +1,24 @@
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+
+# Netlify Identity redirect — needed for CMS login callback
+[[redirects]]
+  from   = "/.netlify/identity"
+  to     = "/.netlify/identity"
+  status = 200
+
+# Admin panel — serve the Decap CMS SPA from /admin/*
+[[redirects]]
+  from   = "/admin/*"
+  to     = "/admin/index.html"
+  status = 200
+
+# React SPA fallback — all other routes serve index.html
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "22"
