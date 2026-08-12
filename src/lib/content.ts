@@ -3,7 +3,7 @@
  *
  * HOW THIS WORKS
  * ──────────────
- * Vite's `import.meta.glob` with `{ as: 'raw', eager: true }` is resolved
+ * Vite's `import.meta.glob` with `{ query: '?raw', import: 'default', eager: true }` is resolved
  * ENTIRELY AT BUILD TIME. When `vite build` runs, Vite reads every matched
  * Markdown file, inlines their text as string literals in the JS bundle,
  * and freezes them as a static Record. No fetch(), no network request,
@@ -25,7 +25,7 @@
  * 3. Add a glob import + export below
  */
 
-import yaml from 'js-yaml'
+import { load } from 'js-yaml'
 import type {
   HeroContent,
   AboutContent,
@@ -44,21 +44,21 @@ import type {
 function parseFrontmatter<T>(raw: string): T {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/)
   if (!match) return {} as T
-  return (yaml.load(match[1]) ?? {}) as T
+  return (load(match[1]) ?? {}) as T
 }
 
 // ─── Build-time glob imports ──────────────────────────────────────────────────
 // Each of these is resolved at `vite build` time — NOT at runtime.
 // The paths are absolute from the project root.
 
-const _hero         = import.meta.glob<string>('/content/pages/hero.md',         { as: 'raw', eager: true })
-const _about        = import.meta.glob<string>('/content/pages/about.md',        { as: 'raw', eager: true })
-const _contact      = import.meta.glob<string>('/content/pages/contact.md',      { as: 'raw', eager: true })
-const _featured     = import.meta.glob<string>('/content/pages/featured.md',     { as: 'raw', eager: true })
-const _services     = import.meta.glob<string>('/content/data/services.md',      { as: 'raw', eager: true })
-const _testimonials = import.meta.glob<string>('/content/data/testimonials.md',  { as: 'raw', eager: true })
-const _awards       = import.meta.glob<string>('/content/data/awards.md',        { as: 'raw', eager: true })
-const _gallery      = import.meta.glob<string>('/content/gallery/*.md',          { as: 'raw', eager: true })
+const _hero         = import.meta.glob<string>('/content/pages/hero.md',         { query: '?raw', import: 'default', eager: true })
+const _about        = import.meta.glob<string>('/content/pages/about.md',        { query: '?raw', import: 'default', eager: true })
+const _contact      = import.meta.glob<string>('/content/pages/contact.md',      { query: '?raw', import: 'default', eager: true })
+const _featured     = import.meta.glob<string>('/content/pages/featured.md',     { query: '?raw', import: 'default', eager: true })
+const _services     = import.meta.glob<string>('/content/data/services.md',      { query: '?raw', import: 'default', eager: true })
+const _testimonials = import.meta.glob<string>('/content/data/testimonials.md',  { query: '?raw', import: 'default', eager: true })
+const _awards       = import.meta.glob<string>('/content/data/awards.md',        { query: '?raw', import: 'default', eager: true })
+const _gallery      = import.meta.glob<string>('/content/gallery/*.md',          { query: '?raw', import: 'default', eager: true })
 
 // ─── Singleton page exports ───────────────────────────────────────────────────
 
