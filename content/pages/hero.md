@@ -8,5 +8,5 @@ cta_primary: View Portfolio
 cta_secondary: About Harichand
 coordinates_lat: 50° 56′ N
 coordinates_lng: 4° 21′ E
-coordinates_label: Brussels · 2024
+coordinates_label: HAMPI · 2026
 ---
